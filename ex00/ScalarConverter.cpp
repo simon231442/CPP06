@@ -1,5 +1,5 @@
 #include "ScalarConverter.hpp"
-#include <ostream>
+#include <iostream>
 #include <cctype>
 #include <iomanip>
 
@@ -22,13 +22,61 @@ ScalarConverter&	ScalarConverter::operator=(ScalarConverter const& src)
 	return *this;
 }
 
-static void			char_literal_display(std::string const& literal);
+static void			nan_nanf_handle(t_displayValues& values);
+static void			inf_inff_handle(t_displayValues& values);
+static void			final_display(t_displayValues& values);
+//static void			char_literal_display(std::string const& literal);
 
-static void			convert(std::string const& literal)
+void				ScalarConverter::convert(std::string const& literal)
 {
-	if (literal.length == 1 && std::isdigit(literal))
-		return (char_literal_display(literal));
+	t_displayValues	values;
+	if (literal == "nan" || literal == "nanf")
+		return nan_nanf_handle(values);
+	if (literal == "+inf" || literal == "+inff")
+		return inf_inff_handle(values);
 }
+
+static void			nan_nanf_handle(t_displayValues& values)
+{
+	values.c = "impossible";
+	values.i = "impossible";
+	values.f = "nanf";
+	values.d = "nan";
+
+	final_display(values);
+}
+
+static void			inf_inff_handle(t_displayValues& values)
+{
+	values.c = "impossible";
+	values.i = "impossible";
+	values.f = "+inff";
+	values.d = "+inf";
+
+	final_display(values);
+}
+
+static void			final_display(t_displayValues& values)
+{
+	std::cout << std::setw(9) << std::left << "char:" << values.c << std::endl;
+	std::cout << std::setw(9) << std::left << "int:" << values.i << std::endl;
+	std::cout << std::setw(9) << std::left << "float:" << values.f << std::endl;
+	std::cout << std::setw(9) << std::left << "double:" << values.d << std::endl;
+	std::cout << std::endl;
+}
+
+
+
+/*
+	if (literal == "nan" || "nanf")
+		return nan_nanf_handle(literal);
+	if (literal.length() == 1 && std::isdigit(literal[0]))
+		return char_literal_display(literal);
+}
+
+static void			nan_nanf_handle(literal)
+{
+
 
 static void			char_literal_display(std::string const& literal)
 {
@@ -43,8 +91,12 @@ static void			char_literal_display(std::string const& literal)
 	d = static_cast<double>(c);
 
 	std::cout << std::setw(9) << std::left << "char:" << c << std::endl;
+	std::cout << std::setw(9) << std::left << "int:" << i << std::endl;
 	std::cout << std::setw(9) << std::left << "float:" << f << std::endl;
+	std::cout << std::setw(9) << std::left << "double:" << d << std::endl;
+	std::cout << std::endl;
 }
 
-
-
+void				value_display
+}
+*/

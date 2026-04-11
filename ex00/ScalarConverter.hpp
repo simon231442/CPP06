@@ -15,4 +15,13 @@ class ScalarConverter {
 		static void			convert(std::string const& literal);
 		};
 
+typedef struct s_displayValues
+{
+	std::string		c;
+	std::string		i;
+	std::string		f;
+	std::string		d;
+}	t_displayValues;
+
+
 #endif
