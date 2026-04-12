@@ -4,6 +4,10 @@
 #include <cctype>
 #include <iomanip>
 #include <exception>
+#include <stdexcept>
+#include <cstdlib>
+#include <cerrno>
+#include <climits>
 
 ScalarConverter::ScalarConverter()
 {
@@ -26,10 +30,12 @@ ScalarConverter&	ScalarConverter::operator=(ScalarConverter const& src)
 
 static void			nan_nanf_handle(t_displayValues& values);
 static void			inf_inff_handle(t_displayValues& values);
+static void			all_impossible_display(t_displayValues& values);
 static void			final_display(t_displayValues& values);
-static int			char_int_display(std::string const& literal);
 static void			float_double_displayable_only(long l);
-//static void			char_literal_display(std::string const& literal);
+static long			literal_to_long(std::string const & literal);
+static void			char_handle(long l);
+static void			int_handle(long l);
 
 void				ScalarConverter::convert(std::string const& literal)
 {
@@ -50,14 +56,20 @@ void				ScalarConverter::convert(std::string const& literal)
 		}
 		catch (std::exception & e)
 		{
-			float_double_displayable_only(l, values);
+			float_double_displayable_only(l);
+			return;
+		}
 	}
 	catch (std::exception & e)
 	{
 		all_impossible_display(values);
+		return;
 	}
-	char_int_display(literal);
-
+	
+	// Print float and double when everything is ok
+	std::cout << std::setw(9) << std::left << "float:" << static_cast<float>(l) << ".0f" << std::endl;
+	std::cout << std::setw(9) << std::left << "double:" << static_cast<double>(l) << ".0" << std::endl;
+	std::cout << std::endl;
 }
 
 static void			nan_nanf_handle(t_displayValues& values)
@@ -117,11 +129,11 @@ long				literal_to_long(std::string const & literal)
 
 	errno = 0;
 
-	l = std::strtol(literal.str(), &endptr, 10)
-	if (*enptr != '\0')
-		throw std::format_error "impossible";
+	l = std::strtol(literal.c_str(), &endptr, 10);
+	if (*endptr != '\0')
+		throw std::invalid_argument("impossible");
 	if (errno == ERANGE)
-		throw std::out_of_range "impossible";
+		throw std::out_of_range("impossible");
 	return l;
 }
 
@@ -151,10 +163,10 @@ static int			char_int_display(std::string const& literal)
 
 static void			char_handle(long l)
 {
-	if (i >= 0 && l <= 127)
+	if (l >= 0 && l <= 127)
 	{
-		if (std::isprint(l))
-			std::cout << std::setw(9) << std::left << "char:" << static_cast<char>(l) << std::endl;
+		if (std::isprint(static_cast<int>(l)))
+			std::cout << std::setw(9) << std::left << "char:" << "'" << static_cast<char>(l) << "'" << std::endl;
 		else
 			std::cout << std::setw(9) << std::left << "char:" << "Non displayable" << std::endl;
 	}
@@ -165,7 +177,7 @@ static void			char_handle(long l)
 static void			int_handle(long l)
 {
 	if (l < INT_MIN || l > INT_MAX)
-		throw std::out_of_range "impossible";
+		throw std::out_of_range("impossible");
 	std::cout << std::setw(9) << std::left << "int:" << static_cast<int>(l) << std::endl;
 }
 
