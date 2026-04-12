@@ -1,4 +1,5 @@
 NAME = ScalarConverter
+TEST_NAME = ScalarConverter_test
 
 ################################################################################
 #                               DIRECTORIES                                    #
@@ -11,6 +12,7 @@ OBJ_DIR = obj
 ################################################################################
 
 SOURCE = ScalarConverter.cpp main.cpp 
+TEST_SOURCE = ScalarConverter.cpp main_tester.cpp
 
 ################################################################################
 #                             COMPILER OPTIONS                                 #
@@ -44,5 +46,10 @@ fclean : clean
 
 re : fclean all
 
-.PHONY : all clean fclean re
+test : $(TEST_NAME)
+
+$(TEST_NAME) : $(TEST_SOURCE)
+	$(CCPP) $(CPPFLAGS) $(TEST_SOURCE) -o $(TEST_NAME)
+
+.PHONY : all clean fclean re test
 
