@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cctype>
 #include <iomanip>
+#include <exception>
 
 ScalarConverter::ScalarConverter()
 {
@@ -27,6 +28,7 @@ static void			nan_nanf_handle(t_displayValues& values);
 static void			inf_inff_handle(t_displayValues& values);
 static void			final_display(t_displayValues& values);
 static int			char_int_display(std::string const& literal);
+static void			float_double_displayable_only(long l);
 //static void			char_literal_display(std::string const& literal);
 
 void				ScalarConverter::convert(std::string const& literal)
@@ -42,7 +44,18 @@ void				ScalarConverter::convert(std::string const& literal)
 	{
 		l = literal_to_long(literal);
 		char_handle(l);
-		int_display(l);
+		try
+		{
+			int_handle(l);
+		}
+		catch (std::exception & e)
+		{
+			float_double_displayable_only(l, values);
+	}
+	catch (std::exception & e)
+	{
+		all_impossible_display(values);
+	}
 	char_int_display(literal);
 
 }
@@ -67,6 +80,26 @@ static void			inf_inff_handle(t_displayValues& values)
 	final_display(values);
 }
 
+static void			all_impossible_display(t_displayValues& values)
+{
+	values.c = "impossible";
+	values.i = "impossible";
+	values.f = "impossible";
+	values.d = "impossible";
+
+	final_display(values);
+}
+
+static void			float_double_displayable_only(long l)
+{
+	std::cout << std::setw(9) << std::left << "char:" << "impossible" << std::endl;
+	std::cout << std::setw(9) << std::left << "int:" << "impossible" << std::endl;
+	std::cout << std::setw(9) << std::left << "float:" << static_cast<float>(l) << std::endl;
+	std::cout << std::setw(9) << std::left << "double:" << static_cast<double>(l) << std::endl;
+	std::cout << std::endl;
+}
+
+
 static void			final_display(t_displayValues& values)
 {
 	std::cout << std::setw(9) << std::left << "char:" << values.c << std::endl;
@@ -76,6 +109,7 @@ static void			final_display(t_displayValues& values)
 	std::cout << std::endl;
 }
 
+
 long				literal_to_long(std::string const & literal)
 {
 	long	l;
@@ -84,6 +118,12 @@ long				literal_to_long(std::string const & literal)
 	errno = 0;
 
 	l = std::strtol(literal.str(), &endptr, 10)
+	if (*enptr != '\0')
+		throw std::format_error "impossible";
+	if (errno == ERANGE)
+		throw std::out_of_range "impossible";
+	return l;
+}
 
 /*
 static int			char_int_display(std::string const& literal)
@@ -122,8 +162,14 @@ static void			char_handle(long l)
 		std::cout << std::setw(9) << std::left << "char:" << "impossible" << std::endl;
 }
 
+static void			int_handle(long l)
+{
+	if (l < INT_MIN || l > INT_MAX)
+		throw std::out_of_range "impossible";
+	std::cout << std::setw(9) << std::left << "int:" << static_cast<int>(l) << std::endl;
+}
 
-
+	
 
 
 
