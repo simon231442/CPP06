@@ -10,7 +10,7 @@ OBJ_DIR = obj
 #                                SOURCE FILES                                  #
 ################################################################################
 
-SOURCE = Serialization.cpp main.cpp 
+SOURCE = Serializer.cpp main.cpp 
 
 ################################################################################
 #                             COMPILER OPTIONS                                 #
