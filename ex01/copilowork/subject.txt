@@ -15,5 +15,6 @@ You must create a non-empty (meaning it has data members) Data structure.
 Do not forget to turn in the files of your Data structure.
 
 #plus largement c'est quoi le concept a apprendre et ce que je suis sense faire dans cette exercice ?
+#fait un plan clair pour le faire efficacement
 
 
