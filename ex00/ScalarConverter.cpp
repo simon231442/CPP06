@@ -44,6 +44,9 @@ void				ScalarConverter::convert(std::string const& literal)
 	char	c;
 
 	t_displayValues	values;
+	
+
+	std::cout /*<< std::setprecision(6)*/ << std::fixed;
 	// Added: handle char inputs first (single non-digit char and quoted char literal like 'a').
 	if (literal_to_char(literal, c))
 	{
