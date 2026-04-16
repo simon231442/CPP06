@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <cerrno>
 #include <climits>
+#include <cmath>
 
 ScalarConverter::ScalarConverter()
 {
@@ -40,6 +41,7 @@ static bool			literal_to_char(std::string const& literal, char& c);
 
 void				ScalarConverter::convert(std::string const& literal)
 {
+	float	f;
 	double	d;
 	char	c;
 
@@ -83,7 +85,12 @@ void				ScalarConverter::convert(std::string const& literal)
 	}
 	
 	// Print float and double when everything is ok
-	std::cout << std::setw(9) << std::left << "float:" << static_cast<float>(d) << "f" << std::endl;
+	f = static_cast<float>(d);
+	std::cout << std::setw(9) << std::left << "float:";
+	if (std::isinf(f))
+		std::cout << f << "f" << std::endl;
+	else
+		std::cout << "impossible" << "f" << std::endl;
 	std::cout << std::setw(9) << std::left << "double:" << d << std::endl;
 	std::cout << std::endl;
 }
