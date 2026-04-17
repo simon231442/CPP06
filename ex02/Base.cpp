@@ -2,7 +2,7 @@
 #include "A.hpp"
 #include "B.hpp"
 #include "C.hpp"
-#include "iostream"
+#include <iostream>
 #include <cstdlib>
 #include <exception>
 
@@ -21,7 +21,7 @@ Base*	generate(void)
 
 void	identify(Base* p)
 {
-	std::cout << (dynamic_cast<A*>(p) ? "A" : dynamic_cast<A*>(p) ? "B" : "C");
+	std::cout << (dynamic_cast<A*>(p) ? "A" : dynamic_cast<B*>(p) ? "B" : "C");
 }
 
 void	identify(Base& p)

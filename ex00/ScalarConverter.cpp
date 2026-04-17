@@ -48,8 +48,7 @@ void				ScalarConverter::convert(std::string const& literal)
 	t_displayValues	values;
 	
 
-	std::cout /*<< std::setprecision(6)*/ << std::fixed;
-	// Added: handle char inputs first (single non-digit char and quoted char literal like 'a').
+//	std::cout /*<< std::setprecision(6)*/ /*<< std::fixed*/; //to set precision //to have decimal notation
 	if (literal_to_char(literal, c))
 	{
 		d = static_cast<double>(c);
@@ -88,24 +87,16 @@ void				ScalarConverter::convert(std::string const& literal)
 	f = static_cast<float>(d);
 	std::cout << std::setw(9) << std::left << "float:";
 	if (std::isinf(f))
-		std::cout << f << "f" << std::endl;
+		std::cout << "impossible" << std::endl;
 	else
-		std::cout << "impossible" << "f" << std::endl;
+		std::cout << f << "f" << std::endl;
 	std::cout << std::setw(9) << std::left << "double:" << d << std::endl;
 	std::cout << std::endl;
 }
 
-// Added helper: detects char literals accepted by ex00 before numeric parsing.
+// detects char literals accepted by ex00 and extracts char literal
 static bool			literal_to_char(std::string const& literal, char& c)
 {
-	if (literal.length() == 1)
-	{
-		if (!std::isdigit(static_cast<unsigned char>(literal[0])))
-		{
-			c = literal[0];
-			return true;
-		}
-	}
 	if (literal.length() == 3 && literal[0] == '\'' && literal[2] == '\'')
 	{
 		c = literal[1];
@@ -146,13 +137,18 @@ static void			all_impossible_display(t_displayValues& values)
 
 static void			float_double_displayable_only(double d)
 {
-	// Updated: do not print char again here to avoid duplicate "char:" lines.
+	float	f;
+
+	f = static_cast<float>(d);
 	std::cout << std::setw(9) << std::left << "int:" << "impossible" << std::endl;
-	std::cout << std::setw(9) << std::left << "float:" << static_cast<float>(d) << "f" << std::endl;
+	std::cout << std::setw(9) << std::left << "float:";
+	if (std::isinf(f) && !std::isinf(d) && !std::isnan(d))
+		std::cout << "impossible" << std::endl;
+	else
+		std::cout << f << "f" << std::endl;
 	std::cout << std::setw(9) << std::left << "double:" << d << std::endl;
 	std::cout << std::endl;
 }
-
 
 static void			final_display(t_displayValues& values)
 {
@@ -162,7 +158,6 @@ static void			final_display(t_displayValues& values)
 	std::cout << std::setw(9) << std::left << "double:" << values.d << std::endl;
 	std::cout << std::endl;
 }
-
 
 double				literal_to_double(std::string const & literal)
 {
@@ -200,4 +195,3 @@ static void			int_handle(double d)
 		throw std::out_of_range("impossible");
 	std::cout << std::setw(9) << std::left << "int:" << static_cast<int>(d) << std::endl;
 }
-

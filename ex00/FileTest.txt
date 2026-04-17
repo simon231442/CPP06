@@ -29,5 +29,7 @@ nan
 nanf
 a
 'a'
+'1'
 1.2ff
 abc
+1e200

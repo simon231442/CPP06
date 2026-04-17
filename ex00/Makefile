@@ -42,7 +42,7 @@ clean :
 	rm -rf $(OBJ_DIR)
 
 fclean : clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(TEST_NAME)
 
 re : fclean all
 
